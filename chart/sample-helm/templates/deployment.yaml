@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-helm
+  template:
+    metadata:
+      labels:
+        app: sample-helm
+    spec:
+      containers:
+        - name: sample-helm-pod
+          image: sample-image:0.0.1
+          imagePullPolicy: Never
+          env:
+            - name: DEMO
+              value: hello
+            - name: YOYO
+              value: hello
+          ports:
+            - name: sample-http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/tmp"
+              name: storage-volume
+            - mountPath: "/app/etc/config-1.json"
+              name: config-1-volume
+              readOnly: true
+
+      volumes:
+        - name: storage-volume
+          emptyDir: { }
+        - name: config-1-volume
+          configMap:
+            name: sample-config-1
