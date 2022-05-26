@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-project
+  template:
+    metadata:
+      labels:
+        app: my-project
+    spec:
+      containers:
+        - name: my-pod
+          image: my-docker-image:0.0.1
+          imagePullPolicy: Never
+          env:
+            - name: HELLO
+              value: hello
+          ports:
+            - name: my-http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/tmp"
+              name: my-storage-volume
+            - mountPath: "/app/etc/"
+              name: my-configmap-volume
+              readOnly: true
+      volumes:
+        - name: my-storage-volume
+          emptyDir: { }
+        - name: my-configmap-volume
+          configMap:
+            name: my-configmap
