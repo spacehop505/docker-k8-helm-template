@@ -32,7 +32,7 @@ minikube image load my-docker-image:0.0.1
 * helm install
 
 ```bash
-helm template sample-project chart/my-helm --debug
+helm install -n <namespace> sample-project chart/my-helm
 ```
 
 * render chart template locally
